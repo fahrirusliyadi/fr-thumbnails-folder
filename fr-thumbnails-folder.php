@@ -65,6 +65,22 @@ register_deactivation_hook( __FILE__, 'deactivate_fr_thumbnails_folder' );
 require plugin_dir_path( __FILE__ ) . 'includes/class-fr-thumbnails-folder.php';
 
 /**
+ * Returns the core class of the plugin.
+ * 
+ * @since 1.0.0
+ * @staticvar Fr_Thumbnails_Folder $plugin
+ * @return Fr_Thumbnails_Folder
+ */
+function fr_thumbnails_folder() {
+    static $plugin = null;
+    
+    if (!$plugin) {
+        $plugin = new Fr_Thumbnails_Folder();
+    }
+    
+    return $plugin;
+}
+/**
  * Begins execution of the plugin.
  *
  * Since everything within the plugin is registered via hooks,
@@ -73,10 +89,4 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-fr-thumbnails-folder.php';
  *
  * @since    1.0.0
  */
-function run_fr_thumbnails_folder() {
-
-	$plugin = new Fr_Thumbnails_Folder();
-	$plugin->run();
-
-}
-run_fr_thumbnails_folder();
+fr_thumbnails_folder()->run();

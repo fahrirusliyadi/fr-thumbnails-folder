@@ -37,6 +37,14 @@ class Fr_Thumbnails_Folder {
      * @var      Fr_Thumbnails_Folder_Loader    $loader    Maintains and registers all hooks for the plugin.
      */
     protected $loader;
+    
+    /**
+     * The reference to the class that responsible for manage image sizes.
+     * 
+     * @since 1.0.0
+     * @var Fr_Thumbnails_Folder_Image_Sizes
+     */
+    protected $image_sizes;
 
     /**
      * The unique identifier of this plugin.
@@ -125,7 +133,8 @@ class Fr_Thumbnails_Folder {
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-fr-thumbnails-folder-public.php';
 
-        $this->loader = new Fr_Thumbnails_Folder_Loader();
+        $this->loader       = new Fr_Thumbnails_Folder_Loader();
+        $this->image_sizes  = new Fr_Thumbnails_Folder_Image_Sizes();
     }
 
     /**
@@ -152,9 +161,8 @@ class Fr_Thumbnails_Folder {
      * @since    1.0.0
      */
     private function define_image_sizes_hooks() {
-        $plugin_image_sizes = new Fr_Thumbnails_Folder_Image_Sizes();
-
-        $this->loader->add_filter('intermediate_image_sizes_advanced', $plugin_image_sizes, 'remove_image_sizes', 10, 2);
+        $this->loader->add_filter('intermediate_image_sizes_advanced', $this->image_sizes, 'remove_image_sizes', 10, 2);
+        $this->loader->add_filter('image_downsize', $this->image_sizes, 'maybe_generate_intermediate_image', 10, 3);
     }
 
     /**
@@ -199,6 +207,26 @@ class Fr_Thumbnails_Folder {
     }
 
     /**
+     * The reference to the class that orchestrates the hooks with the plugin.
+     *
+     * @since     1.0.0
+     * @return    Fr_Thumbnails_Folder_Loader    Orchestrates the hooks of the plugin.
+     */
+    public function get_loader() {
+            return $this->loader;
+    }
+
+    /**
+     * The reference to the class that responsible for manage image sizes.
+     *
+     * @since     1.0.0
+     * @return    Fr_Thumbnails_Folder_Image_Sizes
+     */
+    public function get_image_sizes() {
+        return $this->image_sizes;
+    }
+
+    /**
      * The name of the plugin used to uniquely identify it within the context of
      * WordPress and to define internationalization functionality.
      *
@@ -207,16 +235,6 @@ class Fr_Thumbnails_Folder {
      */
     public function get_plugin_name() {
             return $this->plugin_name;
-    }
-
-    /**
-     * The reference to the class that orchestrates the hooks with the plugin.
-     *
-     * @since     1.0.0
-     * @return    Fr_Thumbnails_Folder_Loader    Orchestrates the hooks of the plugin.
-     */
-    public function get_loader() {
-            return $this->loader;
     }
 
     /**
