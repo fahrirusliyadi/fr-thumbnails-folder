@@ -19,7 +19,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
      * @param array $metadata An associative array of image metadata: width, height, file.
      * @return array
      */
-    public function remove_image_sizes() {
+    public function disable_image_sizes_generation() {
         return array();
     }
     

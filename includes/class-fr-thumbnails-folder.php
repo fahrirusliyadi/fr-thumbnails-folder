@@ -173,7 +173,7 @@ class Fr_Thumbnails_Folder {
      * @since    1.0.0
      */
     private function define_image_sizes_hooks() {
-        $this->loader->add_filter('intermediate_image_sizes_advanced', $this->image_sizes, 'remove_image_sizes', 10, 2);
+        $this->loader->add_filter('intermediate_image_sizes_advanced', $this->image_sizes, 'disable_image_sizes_generation', 10, 2);
         $this->loader->add_filter('image_downsize', $this->image_sizes, 'maybe_generate_intermediate_image', 10, 3);
         $this->loader->add_action('delete_attachment', $this->image_sizes, 'delete_image_sizes', 10, 3);
     }
