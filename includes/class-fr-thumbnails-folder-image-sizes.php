@@ -64,6 +64,26 @@ class Fr_Thumbnails_Folder_Image_Sizes {
     }
     
     /**
+     * Delete intermediate image sizes.
+     *
+     * Hooked on `delete_attachment` filter.
+     * 
+     * @since 1.0.0
+     * @param int $post_id Attachment ID.
+     */
+    public function delete_image_sizes($post_id) {
+        $metadata = wp_get_attachment_metadata($post_id);
+        
+	if (isset($metadata['sizes']) && is_array($metadata['sizes'])) {
+            foreach ($metadata['sizes'] as $sizeinfo) {
+                if (isset($sizeinfo['path'])) {
+                    unlink($sizeinfo['path']);
+                }
+            }
+	}
+    }
+    
+    /**
      * Get the URL of an image attachment.
      *
      * @since 1.0.0
@@ -111,7 +131,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
      */
     protected function find_existing_image($id, $size) {   
         $image_size = image_get_intermediate_size($id, $size);
-        
+                
         if (!$image_size) {
             return;
         }
