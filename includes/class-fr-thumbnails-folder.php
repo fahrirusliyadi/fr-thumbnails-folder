@@ -124,6 +124,11 @@ class Fr_Thumbnails_Folder {
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fr-thumbnails-folder-image-sizes.php';
                 
         /**
+         * The class responsible for helping image editor.
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fr-thumbnails-folder-image-editor-helper.php';
+                
+        /**
          * The class responsible for defining image editor functionality
          * of the plugin.
          */
