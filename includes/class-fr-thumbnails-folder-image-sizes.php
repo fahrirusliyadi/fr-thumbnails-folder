@@ -10,14 +10,6 @@
  */
 class Fr_Thumbnails_Folder_Image_Sizes {
     /**
-     * Wheteher to bypass `image_downsize` filter hook.
-     *  
-     * @since 1.0.0
-     * @var bool
-     */
-    protected $bypass_image_downsize;
-
-    /**
      * Remove the all image sizes that will automatically generated when uploading an image.
      *
      * Hooked on `intermediate_image_sizes_advanced` filter.
@@ -49,7 +41,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
          * No need to generate if array $size is provided. WordPress itself does not generate it,
          * but instead find the best match image size. {@see image_get_intermediate_size()}
          */
-        if ($this->bypass_image_downsize || $downsize !== false || is_array($size)) {
+        if ($downsize !== false || is_array($size)) {
             return $downsize;
         }
         
@@ -72,21 +64,40 @@ class Fr_Thumbnails_Folder_Image_Sizes {
     }
     
     /**
-     * Get the URL of an image attachment without handing `image_downsize` filter.
+     * Get the URL of an image attachment.
      *
      * @since 1.0.0
      * @param int $id               Image attachment ID.
      * @param string|array $size    Optional. Image size to retrieve. Accepts any valid image size, or an array
      *                              of width and height values in pixels (in that order). Default 'thumbnail'.
-     * @param bool $icon            Optional. Whether the image should be treated as an icon. Default false.
      * @return string|false         Attachment URL or false if no image is available.
      */
-    public function get_attachment_image_url($id, $size = 'thumbnail', $icon = false) {
-        $this->bypass_image_downsize    = true;
-        $image_url                      = wp_get_attachment_image_url($id, $size, $icon);
-        $this->bypass_image_downsize    = false;
+    public function get_image_size_url($id, $size) {
+        $upload_dir = wp_get_upload_dir();
+        
+        if (!$upload_dir) {
+            return;
+        }
+        
+        $image_size = image_get_intermediate_size($id, $size);
+        
+        if (!$image_size) {
+            return;
+        }
+        
+        $image_url = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $image_size['path']);
         
         return $image_url;
+    }
+    
+    /**
+     * Get the image sizes folder.
+     * 
+     * @since 1.0.0
+     * @return string
+     */
+    public function get_image_sizes_folder() {
+        return 'sizes';
     }
     
     /**
@@ -98,14 +109,14 @@ class Fr_Thumbnails_Folder_Image_Sizes {
      * @return null|array           Array containing the image URL, width, height, and boolean for whether
      *                              the image is an intermediate size. Null if does not exist.
      */
-    protected function find_existing_image($id, $size) {       
+    protected function find_existing_image($id, $size) {   
         $image_size = image_get_intermediate_size($id, $size);
         
         if (!$image_size) {
             return;
         }
         
-        $image_url = $this->get_attachment_image_url($id, $size);
+        $image_url = $this->get_image_size_url($id, $size);
                 
         if (!$image_url) {
             return;

@@ -153,7 +153,7 @@ class Fr_Thumbnails_Folder_Image_Resizer {
             return;
         }
         
-        $result_url = fr_thumbnails_folder()->get_image_sizes()->get_attachment_image_url($this->args['id'], $this->args['size']);
+        $result_url = fr_thumbnails_folder()->get_image_sizes()->get_image_size_url($this->args['id'], $this->args['size']);
         
         if (!$result_url) {
             return;

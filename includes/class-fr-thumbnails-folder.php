@@ -84,6 +84,7 @@ class Fr_Thumbnails_Folder {
         $this->load_dependencies();
         $this->set_locale();
         $this->define_image_sizes_hooks();
+        $this->define_image_editor_hooks();
         $this->define_admin_hooks();
         $this->define_public_hooks();
     }
@@ -121,6 +122,12 @@ class Fr_Thumbnails_Folder {
          * The class responsible for manage image sizes.
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fr-thumbnails-folder-image-sizes.php';
+                
+        /**
+         * The class responsible for defining image editor functionality
+         * of the plugin.
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fr-thumbnails-folder-image-editors.php';
 
         /**
          * The class responsible for defining all actions that occur in the admin area.
@@ -163,6 +170,18 @@ class Fr_Thumbnails_Folder {
     private function define_image_sizes_hooks() {
         $this->loader->add_filter('intermediate_image_sizes_advanced', $this->image_sizes, 'remove_image_sizes', 10, 2);
         $this->loader->add_filter('image_downsize', $this->image_sizes, 'maybe_generate_intermediate_image', 10, 3);
+    }
+    
+    /**
+     * Register all of the hooks related to the image editor functionality
+     * of the plugin.
+     *
+     * @since    1.0.0
+     */
+    private function define_image_editor_hooks() {
+        $plugin_image_editors = new Fr_Thumbnails_Folder_Image_Editors();
+
+        $this->loader->add_filter('wp_image_editors', $plugin_image_editors, 'register_editors');
     }
 
     /**
