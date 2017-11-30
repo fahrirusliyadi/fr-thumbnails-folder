@@ -14,8 +14,8 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Fr Thumbnails Folder
- * Plugin URI:        https://example.com/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Plugin URI:        https://wordpress.org/plugins/fr-thumbnails-folder/
+ * Description:       Move thumbnails file location to `wp-content/uploads/thumbnails` directory.
  * Version:           1.0.0
  * Author:            Fahri Rusliyadi
  * Author URI:        https://profiles.wordpress.org/fahrirusliyadi
@@ -27,7 +27,7 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-	die;
+    die;
 }
 
 /**
@@ -36,27 +36,6 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'PLUGIN_NAME_VERSION', '1.0.0' );
-
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-fr-thumbnails-folder-activator.php
- */
-function activate_fr_thumbnails_folder() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-fr-thumbnails-folder-activator.php';
-	Fr_Thumbnails_Folder_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-fr-thumbnails-folder-deactivator.php
- */
-function deactivate_fr_thumbnails_folder() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-fr-thumbnails-folder-deactivator.php';
-	Fr_Thumbnails_Folder_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_fr_thumbnails_folder' );
-register_deactivation_hook( __FILE__, 'deactivate_fr_thumbnails_folder' );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -80,6 +59,7 @@ function fr_thumbnails_folder() {
     
     return $plugin;
 }
+
 /**
  * Begins execution of the plugin.
  *
