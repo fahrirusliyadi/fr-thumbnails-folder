@@ -12,92 +12,121 @@
 
 /**
  * The admin-specific functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
- *
  * @package    Fr_Thumbnails_Folder
  * @subpackage Fr_Thumbnails_Folder/admin
  * @author     Fahri Rusliyadi <fahri.rusliyadi@gmail.com>
  */
 class Fr_Thumbnails_Folder_Admin {
+    /**
+     * Add tools submenu page.
+     * 
+     * Hooked on `admin_menu` action.
+     * 
+     * @since 1.0.0
+     */
+    public function add_tools_page() {
+        add_submenu_page(
+            'tools.php',
+            __('Delete Thumbnails', 'fr-thumbnails-folder'),
+            __('Delete Thumbnails', 'fr-thumbnails-folder'),
+            'manage_options',
+            'fr_thumbnails_folder_delete_image_sizes',
+            array($this, 'delete_image_sizes_tool_page')
+        );
+    }
+    
+    /**
+     * Display "Delete Thumbnails" tools page content.
+     * 
+     * @since 1.0.0
+     */
+    public function delete_image_sizes_tool_page() {
+        // Check user capabilities.
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+        
+        include plugin_dir_path(__FILE__) . 'partials/delete-image-sizes-tool-page.php';
+    }
+    
+    /**
+     * Delete all intermediate image sizes.
+     *
+     * Hook on `wp_ajax_{$action}` action. The dynamic portion of the hook name, 
+     * `$action`, the name of the AJAX action callback being fired, which is `fr_thumbnails_folder_delete_image_sizes`.
+     *
+     * @since 2.6.0
+     */
+    public function delete_image_sizes() {
+        check_ajax_referer('fr_thumbnails_folder', 'nonce');
+                
+        $paged          = filter_input(INPUT_POST, 'paged', FILTER_SANITIZE_NUMBER_INT);
+        $posts_per_page = 10;
+        $query          = new WP_Query();
+        $posts          = $query->query(array(
+                            'paged'          => filter_input(INPUT_POST, 'paged', FILTER_SANITIZE_NUMBER_INT),
+                            'posts_per_page' => $posts_per_page,
+                            'post_mime_type' => 'image',
+                            'post_status'    => 'any',
+                            'post_type'      => 'attachment',
+                        ));
+        $prev_deleted   = ($paged - 1) * $posts_per_page;
+        
+        foreach ($posts as $post) {
+            fr_thumbnails_folder()->get_image_sizes()->delete_all_image_sizes($post->ID);
+        }
+        
+        echo wp_json_encode(array(
+            'total'     => $query->found_posts,
+            'deleted'   => $prev_deleted + $query->post_count,
+        ));
+        
+        wp_die();
+    }
+    
+    /**
+     * Register the stylesheets for the admin area.
+     *
+     * @since    1.0.0
+     */
+    public function enqueue_styles() {
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
-	private $plugin_name;
+            /**
+             * This function is provided for demonstration purposes only.
+             *
+             * An instance of this class should be passed to the run() function
+             * defined in Fr_Thumbnails_Folder_Loader as all of the hooks are defined
+             * in that particular class.
+             *
+             * The Fr_Thumbnails_Folder_Loader will then create the relationship
+             * between the defined hooks and the functions defined in this
+             * class.
+             */
 
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
+            wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fr-thumbnails-folder-admin.css', array(), $this->version, 'all' );
 
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
-	 */
-	public function __construct( $plugin_name, $version ) {
+    }
 
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-
-	}
-
-	/**
-	 * Register the stylesheets for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_styles() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Fr_Thumbnails_Folder_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Fr_Thumbnails_Folder_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fr-thumbnails-folder-admin.css', array(), $this->version, 'all' );
-
-	}
-
-	/**
-	 * Register the JavaScript for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Fr_Thumbnails_Folder_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Fr_Thumbnails_Folder_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fr-thumbnails-folder-admin.js', array( 'jquery' ), $this->version, false );
-
-	}
-
+    /**
+     * Register the JavaScript for the admin area.
+     *
+     * Hooked on `admin_enqueue_scripts` action.
+     * 
+     * @since 1.0.0
+     * @param string $hook_suffix The current admin page.
+     */
+    public function enqueue_scripts($hook_suffix) {
+        if ($hook_suffix != 'tools_page_fr_thumbnails_folder_delete_image_sizes') {
+            return;
+        }
+        
+        wp_enqueue_script(fr_thumbnails_folder()->get_plugin_name(), plugin_dir_url( __FILE__ ) . 'js/fr-thumbnails-folder-admin.js', array('jquery'), fr_thumbnails_folder()->get_version(), true);
+        wp_localize_script(fr_thumbnails_folder()->get_plugin_name(), 'fr_thumbnails_folder', array(
+            'nonce' => wp_create_nonce('fr_thumbnails_folder'),
+            'l10n'  => array(
+                'start'     => __('Begin deleting thumbnails.', 'fr-thumbnails-folder'),
+                'status'    => __('Number of images deleted: %1$s.', 'fr-thumbnails-folder'),
+            )
+        ));
+    }
 }

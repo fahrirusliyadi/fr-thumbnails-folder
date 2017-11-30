@@ -86,19 +86,18 @@ class Fr_Thumbnails_Folder_Image_Resizer {
      * Set the $wanted_size property.
      * 
      * @since 1.0.0
-     * @global array $_wp_additional_image_sizes
      */
     protected function set_wanted_size() {
-        global $_wp_additional_image_sizes;
+        $additional_image_sizes = wp_get_additional_image_sizes();
         
         $width  = 0;
         $height = 0;
         $crop   = false;
 
-        if (isset($_wp_additional_image_sizes[$this->args['size']])) {
-            $width  = $_wp_additional_image_sizes[$this->args['size']]['width'];
-            $height = $_wp_additional_image_sizes[$this->args['size']]['height'];
-            $crop   = isset($_wp_additional_image_sizes[$this->args['size']]['crop'] ) ? $_wp_additional_image_sizes[$this->args['size']]['crop'] : false;
+        if (isset($additional_image_sizes[$this->args['size']])) {
+            $width  = $additional_image_sizes[$this->args['size']]['width'];
+            $height = $additional_image_sizes[$this->args['size']]['height'];
+            $crop   = isset($additional_image_sizes[$this->args['size']]['crop'] ) ? $additional_image_sizes[$this->args['size']]['crop'] : false;
         } else if (in_array($this->args['size'], array('thumbnail', 'medium', 'large'))) {
             $width  = get_option($this->args['size'] . '_size_w');
             $height = get_option($this->args['size'] . '_size_h');
