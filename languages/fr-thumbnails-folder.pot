@@ -1,0 +1,51 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2017-11-30 09:39+0000\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: admin/class-fr-thumbnails-folder-admin.php:30
+#: admin/class-fr-thumbnails-folder-admin.php:31
+msgid "Delete Thumbnails"
+msgstr ""
+
+#: admin/class-fr-thumbnails-folder-admin.php:104
+msgid "Begin deleting thumbnails."
+msgstr ""
+
+#: admin/class-fr-thumbnails-folder-admin.php:105
+#, php-format
+msgid "Number of images deleted: %1$s."
+msgstr ""
+
+#: admin/partials/delete-image-sizes-tool-page.php:18
+msgid "Delete all existing thumbnails."
+msgstr ""
+
+#: admin/partials/delete-image-sizes-tool-page.php:20
+msgid "Delete"
+msgstr ""
+
+#. Name of the plugin
+msgid "Fr Thumbnails Folder"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Move thumbnails file location to `wp-content/uploads/thumbnails` directory."
+msgstr ""
+
+#. URI of the plugin
+msgid "https://wordpress.org/plugins/fr-thumbnails-folder/"
+msgstr ""
+
+#. Author of the plugin
+msgid "Fahri Rusliyadi"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://profiles.wordpress.org/fahrirusliyadi"
+msgstr ""
