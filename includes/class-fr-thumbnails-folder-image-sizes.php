@@ -146,7 +146,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
      * @return string
      */
     public function get_image_sizes_folder() {
-        return 'sizes';
+        return 'thumbnails';
     }
     
     /**
