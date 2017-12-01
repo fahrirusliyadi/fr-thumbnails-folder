@@ -11,7 +11,8 @@ class Fr_Thumbnails_Folder_Image_Editors {
     /**
      * Register our editors to the list of image editing library classes.
      * 
-     * Hooked on `wp_image_editors` filter.
+     * Hooked on `wp_image_editors` filter. Priority 70, to run after:
+     * - EWWW Image Optimizer: priority 60
      *
      * @since 1.0.0
      * @param array $image_editors List of available image editors. Defaults are
@@ -30,6 +31,11 @@ class Fr_Thumbnails_Folder_Image_Editors {
         // handle resizing before testing other engines.
         array_unshift($image_editors, 'Fr_Thumbnails_Folder_Image_Editor_Gd');
         array_unshift($image_editors, 'Fr_Thumbnails_Folder_Image_Editor_Imagick');
+        
+        if (class_exists('WP_Image_Editor_Gmagick')) {
+            require_once plugin_dir_path(__FILE__) . 'image-editors/class-fr-thumbnails-folder-image-editor-gmagick.php';
+            array_unshift($image_editors, 'Fr_Thumbnails_Folder_Image_Editor_Gmagick');
+        }
         
         return $image_editors;
     }

@@ -126,6 +126,14 @@ class Fr_Thumbnails_Folder_Image_Resizer {
      */
     protected function generate_image_size() {
         $image_path     = get_attached_file($this->args['id']);
+        /**
+         * We do not want to use image_make_intermediate_size() function, because it removes, 
+         * the `path` from the metadata array. We will use this path to get the image URL and to
+         * delete the image.
+         * {@see Fr_Thumbnails_Folder_Image_Sizes::get_image_size_url()}
+         * {@see Fr_Thumbnails_Folder_Image_Sizes::delete_image_sizes()}
+         * {@see Fr_Thumbnails_Folder_Image_Sizes::delete_all_image_sizes()}
+         */ 
         $image_editor   = wp_get_image_editor($image_path);
 
         if (is_wp_error($image_editor)) {

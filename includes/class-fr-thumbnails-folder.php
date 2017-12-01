@@ -170,7 +170,7 @@ class Fr_Thumbnails_Folder {
     private function define_image_editor_hooks() {
         $plugin_image_editors = new Fr_Thumbnails_Folder_Image_Editors();
 
-        $this->loader->add_filter('wp_image_editors', $plugin_image_editors, 'register_editors');
+        $this->loader->add_filter('wp_image_editors', $plugin_image_editors, 'register_editors', 70);
     }
 
     /**
