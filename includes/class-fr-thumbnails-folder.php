@@ -74,12 +74,8 @@ class Fr_Thumbnails_Folder {
      * @since    1.0.0
      */
     public function __construct() {
-        if ( defined( 'PLUGIN_NAME_VERSION' ) ) {
-                $this->version = PLUGIN_NAME_VERSION;
-        } else {
-                $this->version = '1.0.0';
-        }
-        $this->plugin_name = 'fr-thumbnails-folder';
+        $this->plugin_name  = 'fr-thumbnails-folder';
+        $this->version      = FR_THUMBNAILS_FOLDER_VERSION;
 
         $this->load_dependencies();
         $this->set_locale();
