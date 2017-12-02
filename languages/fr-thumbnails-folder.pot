@@ -1,7 +1,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2017-11-30 09:39+0000\n"
+"POT-Creation-Date: 2017-12-02 04:20+0000\n"
 "Language: \n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -35,7 +35,8 @@ msgstr ""
 
 #. Description of the plugin
 msgid ""
-"Move thumbnails file location to `wp-content/uploads/thumbnails` directory."
+"Move thumbnails file location to <code>{$upload_path}/thumbnails</code> or "
+"<code>{$upload_path}/sites/{$blog_id}/thumbnails</code> for multisite."
 msgstr ""
 
 #. URI of the plugin

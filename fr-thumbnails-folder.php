@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Fr Thumbnails Folder
  * Plugin URI:        https://wordpress.org/plugins/fr-thumbnails-folder/
- * Description:       Move thumbnails file location to `wp-content/uploads/thumbnails` directory.
+ * Description:       Move thumbnails file location to <code>{$upload_path}/thumbnails</code> or <code>{$upload_path}/sites/{$blog_id}/thumbnails</code> for multisite.
  * Version:           1.0.0
  * Author:            Fahri Rusliyadi
  * Author URI:        https://profiles.wordpress.org/fahrirusliyadi
