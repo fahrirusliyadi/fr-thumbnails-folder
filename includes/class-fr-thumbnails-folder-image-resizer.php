@@ -126,14 +126,6 @@ class Fr_Thumbnails_Folder_Image_Resizer {
      */
     protected function generate_image_size() {
         $image_path     = get_attached_file($this->args['id']);
-        /**
-         * We do not want to use image_make_intermediate_size() function, because it removes, 
-         * the `path` from the metadata array. We will use this path to get the image URL and to
-         * delete the image.
-         * {@see Fr_Thumbnails_Folder_Image_Sizes::get_image_size_url()}
-         * {@see Fr_Thumbnails_Folder_Image_Sizes::delete_image_sizes()}
-         * {@see Fr_Thumbnails_Folder_Image_Sizes::delete_all_image_sizes()}
-         */ 
         $image_editor   = wp_get_image_editor($image_path);
 
         if (is_wp_error($image_editor)) {
@@ -142,16 +134,27 @@ class Fr_Thumbnails_Folder_Image_Resizer {
 
         $resize_result = $image_editor->resize($this->wanted_size['width'], $this->wanted_size['height'], $this->wanted_size['crop']);
 
-        if (!$resize_result || is_wp_error($resize_result)) {
+        if (is_wp_error($resize_result)) {
             return;
         }
         
-        $save_result = $image_editor->save();
+        $generated_filename = $image_editor->generate_filename();
+        $result_filename    = $this->modify_filename($generated_filename);
+        $save_result        = $image_editor->save($result_filename);
         
         if (!$save_result || is_wp_error($save_result)) {
             return;
         }
 
+        /**
+         * Let's keep the `path` from the metadata. We will use this path to get the 
+         * image URL and to delete the image.
+         * {@see Fr_Thumbnails_Folder_Image_Sizes::get_image_size_url()}
+         * {@see Fr_Thumbnails_Folder_Image_Sizes::delete_image_sizes()}
+         * {@see Fr_Thumbnails_Folder_Image_Sizes::delete_all_image_sizes()}
+         * 
+         * The original behavior removes the `path`. {@see image_make_intermediate_size()}
+         */ 
         $this->metadata['sizes'][$this->args['size']] = $save_result;
 
         $metadata_result = wp_update_attachment_metadata($this->args['id'], $this->metadata);
@@ -172,5 +175,25 @@ class Fr_Thumbnails_Folder_Image_Resizer {
             $save_result['height'],
             true,
         );
+    }
+    
+    
+    /**
+     * Modify intermediate image size file name to move its location.
+     * 
+     * @since 1.0.0
+     */
+    protected function modify_filename($generated_filename) {
+        $upload_dir = wp_get_upload_dir();
+        
+        if (!$upload_dir) {
+            return $generated_filename;
+        }
+        
+        $sizes_folder   = fr_thumbnails_folder()->get_image_sizes()->get_image_sizes_folder();
+        $new_dir        = path_join($upload_dir['basedir'], $sizes_folder);
+        $new_filename   = str_replace($upload_dir['basedir'], $new_dir, $generated_filename);
+        
+        return $new_filename;
     }
 }
