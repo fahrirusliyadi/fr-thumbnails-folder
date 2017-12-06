@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: fahrirusliyadi
-Donate link: https://profiles.wordpress.org/fahrirusliyadi
+Donate link: https://paypal.me/FahriRusliyadi
 Tags: thumbnail, thumbnails, image, images, folder, directory
 Requires at least: 4.4.0
 Tested up to: 4.9
