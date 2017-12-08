@@ -21,13 +21,13 @@ This plugin will only move the thumbnails location for new uploaded images. To m
 1. Upload `fr-thumbnails-folder` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the *Plugins* menu in WordPress
 
-== Uninstallation ==
+== Frequently Asked Questions ==
+
+= Uninstallation Instructions =
 
 1. Deactivate and delete the plugin through the *Plugins* menu in WordPress
 1. Regenerate thumbnails using [Regenerate Thumbnails](https://wordpress.org/plugins/regenerate-thumbnails/) plugin
 1. Delete `{$upload_path}/thumbnails` directory
-
-== Frequently Asked Questions ==
 
 = Why did you create this plugin? =
 
