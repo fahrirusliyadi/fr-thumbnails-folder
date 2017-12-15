@@ -143,6 +143,7 @@ class Fr_Thumbnails_Folder {
         $this->loader->add_filter('intermediate_image_sizes_advanced', $this->image_sizes, 'disable_image_sizes_generation', 10, 2);
         $this->loader->add_filter('image_downsize', $this->image_sizes, 'maybe_generate_intermediate_image', 10, 3);
         $this->loader->add_action('delete_attachment', $this->image_sizes, 'delete_image_sizes', 10, 3);
+        $this->loader->add_filter('wp_calculate_image_srcset', $this->image_sizes, 'modify_srcset_sources', 10, 5);
     }
 
     /**

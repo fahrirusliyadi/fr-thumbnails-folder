@@ -84,6 +84,50 @@ class Fr_Thumbnails_Folder_Image_Sizes {
     }
     
     /**
+     * Modify image's 'srcset' sources.
+     * 
+     * Replace the source URLs with our custom thumbnails URLs.
+     * 
+     * Hooked on `wp_calculate_image_srcset` filter.
+     *
+     * @since 1.0.1
+     * @param array  $sources {
+     *     One or more arrays of source data to include in the 'srcset'.
+     *
+     *     @type array $width {
+     *         @type string $url        The URL of an image source.
+     *         @type string $descriptor The descriptor type used in the image candidate string,
+     *                                  either 'w' or 'x'.
+     *         @type int    $value      The source width if paired with a 'w' descriptor, or a
+     *                                  pixel density value if paired with an 'x' descriptor.
+     *     }
+     * }
+     * @param array  $size_array    Array of width and height values in pixels (in that order).
+     * @param string $image_src     The 'src' of the image.
+     * @param array  $image_meta    The image meta data as returned by 'wp_get_attachment_metadata()'.
+     * @param int    $attachment_id Image attachment ID or 0.
+     * @return array                Modified 'srcset' source data.
+     */
+    public function modify_srcset_sources($sources, $size_array, $image_src, $image_meta, $attachment_id) {
+        if (!isset($image_meta['sizes'])) {
+            return $sources;
+        }
+                
+        foreach ($sources as $width => $source) {
+            $basename = basename($source['url']);
+            
+            foreach ($image_meta['sizes'] as $size => $size_data) {
+                if ($basename == $size_data['file'] && $url = $this->get_image_size_url($attachment_id, $size)) {
+                    $sources[$width]['url'] = $url;
+                    break;
+                }
+            }
+        }
+        
+        return $sources;
+    }
+    
+    /**
      * Delete all intermediate image sizes.
      *
      * @since 1.0.0
