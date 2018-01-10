@@ -45,6 +45,23 @@ class Fr_Thumbnails_Folder_Image_Sizes {
             return $downsize;
         }
         
+        // Skip if not an image.
+        if (!wp_attachment_is_image($id)) {
+            return $downsize;
+        }
+         
+        $metadata = wp_get_attachment_metadata($id);
+                
+        // Skip if
+        if (
+            // thumbnail exists,
+            isset($metadata['sizes'][$size]) && 
+            // but still in the default location.
+            (!isset($metadata['sizes'][$size]['path']) || !stristr($metadata['sizes'][$size]['path'], $this->get_image_sizes_path()))
+        ) {
+            return $downsize;
+        }
+                
         $existing_image = $this->find_existing_image($id, $size);
         
         // Image already exists, return it.
@@ -112,14 +129,17 @@ class Fr_Thumbnails_Folder_Image_Sizes {
         if (!isset($image_meta['sizes'])) {
             return $sources;
         }
-                
+        
         foreach ($sources as $width => $source) {
             $basename = basename($source['url']);
             
             foreach ($image_meta['sizes'] as $size => $size_data) {
+                if (!isset($size_data['path']) || !stristr($size_data['path'], $this->get_image_sizes_path())) {
+                    continue;
+                }
+        
                 if ($basename == $size_data['file'] && $url = $this->get_image_size_url($attachment_id, $size)) {
                     $sources[$width]['url'] = $url;
-                    break;
                 }
             }
         }
@@ -191,6 +211,19 @@ class Fr_Thumbnails_Folder_Image_Sizes {
      */
     public function get_image_sizes_folder() {
         return 'thumbnails';
+    }
+    
+    /**
+     * Get the image sizes path.
+     * 
+     * @since 1.0.2
+     * @return string
+     */
+    public function get_image_sizes_path() {
+        $folder     = $this->get_image_sizes_folder();
+        $upload_dir = wp_get_upload_dir();
+        
+        return path_join($upload_dir['basedir'], $folder);
     }
     
     /**

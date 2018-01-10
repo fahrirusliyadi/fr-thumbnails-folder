@@ -175,8 +175,7 @@ class Fr_Thumbnails_Folder_Image_Resizer {
             $save_result['height'],
             true,
         );
-    }
-    
+    }    
     
     /**
      * Modify intermediate image size file name to move its location.
@@ -190,8 +189,7 @@ class Fr_Thumbnails_Folder_Image_Resizer {
             return $generated_filename;
         }
         
-        $sizes_folder   = fr_thumbnails_folder()->get_image_sizes()->get_image_sizes_folder();
-        $new_dir        = path_join($upload_dir['basedir'], $sizes_folder);
+        $new_dir        = fr_thumbnails_folder()->get_image_sizes()->get_image_sizes_path();
         $new_filename   = str_replace($upload_dir['basedir'], $new_dir, $generated_filename);
         
         return $new_filename;
