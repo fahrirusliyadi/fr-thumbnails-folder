@@ -61,16 +61,16 @@ class Fr_Thumbnails_Folder_Admin {
         check_ajax_referer('fr_thumbnails_folder', 'nonce');
                 
         $paged          = filter_input(INPUT_POST, 'paged', FILTER_SANITIZE_NUMBER_INT);
-        $posts_per_page = 10;
         $query          = new WP_Query();
         $posts          = $query->query(array(
-                            'paged'          => filter_input(INPUT_POST, 'paged', FILTER_SANITIZE_NUMBER_INT),
-                            'posts_per_page' => $posts_per_page,
+                            'paged'          => $paged,
+                            'posts_per_page' => 1,
+                            'order'          => 'ASC',
+                            'orderby'        => 'ID',
                             'post_mime_type' => 'image',
                             'post_status'    => 'any',
                             'post_type'      => 'attachment',
                         ));
-        $prev_deleted   = ($paged - 1) * $posts_per_page;
         
         foreach ($posts as $post) {
             fr_thumbnails_folder()->get_image_sizes()->delete_all_image_sizes($post->ID);
@@ -78,7 +78,7 @@ class Fr_Thumbnails_Folder_Admin {
         
         echo wp_json_encode(array(
             'total'     => (int) $query->found_posts,
-            'deleted'   => (int) $prev_deleted + $query->post_count,
+            'deleted'   => (int) $paged,
         ));
         
         wp_die();
