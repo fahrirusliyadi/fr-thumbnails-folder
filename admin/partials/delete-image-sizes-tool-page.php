@@ -17,5 +17,10 @@
     
     <p class="description"><?php _e('Delete all existing thumbnails.', 'fr-thumbnails-folder') ?></p>
     
-    <p class="submit"><button id="fr-thumbnails-folder-delete-image-sizes-button" class="button button-primary"><?php _e('Delete', 'fr-thumbnails-folder') ?></button></p>
+    <p id="fr-thumbnails-folder-delete-image-sizes-button-wrapper" class="submit">
+        <button id="fr-thumbnails-folder-delete-image-sizes-button" class="button button-primary"><?php _e('Delete', 'fr-thumbnails-folder') ?></button>
+    </p>
+    <p id="fr-thumbnails-folder-retry-delete-image-sizes-button-wrapper" class="retry hidden">
+        <button id="fr-thumbnails-folder-retry-delete-image-sizes-button" class="button button-primary"><?php _e('Retry', 'fr-thumbnails-folder') ?></button>
+    </p>
 </div>

@@ -2,6 +2,7 @@
  * All of the code for admin-facing JavaScript source.
  * 
  * @since 1.0.0
+ * @author Fahri Rusliyadi <fahri.rusliyadi@gmail.com>
  * @param {jQuery} $
  * @returns {undefined}
  */
@@ -65,7 +66,23 @@
              * @since 1.0.0
              * @type jQuery
              */
-            this.$buttonWrapper;
+            this.$buttonWrapper = this.$document.find('#fr-thumbnails-folder-delete-image-sizes-button-wrapper');
+            
+            /**
+             * The retry delete button wrapper.
+             * 
+             * @since 1.0.0
+             * @type jQuery
+             */
+            this.$retryButtonWrapper = this.$document.find('#fr-thumbnails-folder-retry-delete-image-sizes-button-wrapper');
+            
+            /**
+             * Current page number.
+             * 
+             * @since 1.0.2
+             * @type int
+             */
+            this.paged = 1;
             
             this._init();
         }
@@ -78,6 +95,7 @@
          */
         DeleteImageSizes.prototype._init = function () {
             this.$document.on('click.fr-thumbnails-folder', '#fr-thumbnails-folder-delete-image-sizes-button', $.proxy(this.deleteImageSizes, this));
+            this.$document.on('click.fr-thumbnails-folder', '#fr-thumbnails-folder-retry-delete-image-sizes-button', $.proxy(this.retryDeleteImageSizes, this));
         };
         
         /**
@@ -87,43 +105,57 @@
          * @param {$.Event} event
          * @returns {undefined}
          */
-        DeleteImageSizes.prototype.deleteImageSizes = function(event) {
-            this.$buttonWrapper = $(event.target).closest('p');
-                
+        DeleteImageSizes.prototype.deleteImageSizes = function(event) {                
             this.$buttonWrapper.html(fr_thumbnails_folder.l10n.start);
                 
-            this._requestDeleteImageSizes({
-                paged: 1
-            });
+            this._requestDeleteImageSizes();
+        };
+        
+        /**
+         * Retry delete button click event handler.
+         * 
+         * @since 1.0.2
+         * @param {$.Event} event
+         * @returns {undefined}
+         */
+        DeleteImageSizes.prototype.retryDeleteImageSizes = function(event) {     
+            this.$retryButtonWrapper.addClass('hidden');
+            
+            this._requestDeleteImageSizes();
         };
         
         /**
          * Send delete request to WordPress server.
          * 
          * @since 1.0.0
-         * @param {Object} params
          * @returns {undefined}
          */
-        DeleteImageSizes.prototype._requestDeleteImageSizes = function(params) {
+        DeleteImageSizes.prototype._requestDeleteImageSizes = function() {
             var _this = this;
             
             $.post(ajaxurl, {
                 action: 'fr_thumbnails_folder_delete_image_sizes',
                 nonce:  fr_thumbnails_folder.nonce,
-                paged:  params.paged
+                paged:  this.paged
             }, null, 'json')
             .done(function(data, textStatus, jqXHR) {
                 _this.$buttonWrapper.html(fr_thumbnails_folder.l10n.status.replace('%1$s', data.deleted + '/' + data.total));
         
                 if (data.deleted < data.total) {
-                    var newParams   = $.extend({}, params);
-                    newParams.paged = params.paged + 1;
+                    _this.paged += 1;
                     
-                    _this._requestDeleteImageSizes(newParams);
+                    _this._requestDeleteImageSizes();
                 }
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                _this.$buttonWrapper.html(textStatus + ': ' + errorThrown);
+                var message = textStatus;
+        
+                if (errorThrown) {
+                    message += ': ' + errorThrown;
+                }
+        
+                _this.$buttonWrapper.html(message);
+                _this.$retryButtonWrapper.removeClass('hidden');
             });
         };
         

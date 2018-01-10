@@ -77,8 +77,8 @@ class Fr_Thumbnails_Folder_Admin {
         }
         
         echo wp_json_encode(array(
-            'total'     => $query->found_posts,
-            'deleted'   => $prev_deleted + $query->post_count,
+            'total'     => (int) $query->found_posts,
+            'deleted'   => (int) $prev_deleted + $query->post_count,
         ));
         
         wp_die();
