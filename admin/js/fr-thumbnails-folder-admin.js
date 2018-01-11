@@ -79,7 +79,7 @@
             /**
              * Current page number.
              * 
-             * @since 1.0.2
+             * @since 1.2.0
              * @type int
              */
             this.paged = 1;
@@ -114,7 +114,7 @@
         /**
          * Retry delete button click event handler.
          * 
-         * @since 1.0.2
+         * @since 1.2.0
          * @param {$.Event} event
          * @returns {undefined}
          */

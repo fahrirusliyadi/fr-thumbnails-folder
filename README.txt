@@ -4,7 +4,7 @@ Donate link: https://paypal.me/FahriRusliyadi
 Tags: thumbnail, thumbnails, image, images, folder, directory
 Requires at least: 4.4.0
 Tested up to: 4.9.1
-Stable tag: 1.0.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,11 @@ This plugin will only move the thumbnails location for new uploaded images. To m
 When backing up files, I only want the original images, not the thumbnails. So to make things easier, I need to separate its location.
 
 == Changelog ==
+
+= 1.2.0 =
+* Add ability to retry deleting thumbnails.
+* Delete thumbnails one by one.
+* Fix plugin cannot display default thumbnail location.
 
 = 1.0.1 =
 * Fix incorrect `srcset` URLs.

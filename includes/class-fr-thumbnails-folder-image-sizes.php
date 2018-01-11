@@ -216,7 +216,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
     /**
      * Get the image sizes path.
      * 
-     * @since 1.0.2
+     * @since 1.2.0
      * @return string
      */
     public function get_image_sizes_path() {
