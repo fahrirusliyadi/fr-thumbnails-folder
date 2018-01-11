@@ -183,12 +183,7 @@ class Fr_Thumbnails_Folder_Image_Resizer {
      * @since 1.0.0
      */
     protected function modify_filename($generated_filename) {
-        $upload_dir = wp_get_upload_dir();
-        
-        if (!$upload_dir) {
-            return $generated_filename;
-        }
-        
+        $upload_dir     = wp_get_upload_dir();        
         $new_dir        = fr_thumbnails_folder()->get_image_sizes()->get_image_sizes_path();
         $new_filename   = str_replace($upload_dir['basedir'], $new_dir, $generated_filename);
         

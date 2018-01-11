@@ -185,20 +185,15 @@ class Fr_Thumbnails_Folder_Image_Sizes {
      *                              of width and height values in pixels (in that order). Default 'thumbnail'.
      * @return string|false         Attachment URL or false if no image is available.
      */
-    public function get_image_size_url($id, $size) {
-        $upload_dir = wp_get_upload_dir();
-        
-        if (!$upload_dir) {
-            return;
-        }
-        
+    public function get_image_size_url($id, $size) {    
         $image_size = image_get_intermediate_size($id, $size);
         
         if (!$image_size) {
             return;
         }
         
-        $image_url = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $image_size['path']);
+        $upload_dir = wp_get_upload_dir();    
+        $image_url  = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $image_size['path']);
         
         return $image_url;
     }
