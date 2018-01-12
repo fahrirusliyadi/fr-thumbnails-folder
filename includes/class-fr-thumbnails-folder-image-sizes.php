@@ -57,7 +57,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
             // thumbnail exists,
             isset($metadata['sizes'][$size]) && 
             // but still in the default location.
-            (!isset($metadata['sizes'][$size]['path']) || stripos($metadata['sizes'][$size]['path'], $this->get_image_sizes_path()) === false)
+            (!isset($metadata['sizes'][$size]['path']) || stripos($metadata['sizes'][$size]['path'], $this->get_image_sizes_path($id, $size)) === false)
         ) {
             return $downsize;
         }
@@ -134,7 +134,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
             $basename = basename($source['url']);
             
             foreach ($image_meta['sizes'] as $size => $size_data) {
-                if (!isset($size_data['path']) || stripos($size_data['path'], $this->get_image_sizes_path()) === false) {
+                if (!isset($size_data['path']) || stripos($size_data['path'], $this->get_image_sizes_path($attachment_id, $size)) === false) {
                     continue;
                 }
         
@@ -195,30 +195,65 @@ class Fr_Thumbnails_Folder_Image_Sizes {
         $upload_dir = wp_get_upload_dir();    
         $image_url  = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $image_size['path']);
         
-        return $image_url;
-    }
-    
-    /**
-     * Get the image sizes folder.
-     * 
-     * @since 1.0.0
-     * @return string
-     */
-    public function get_image_sizes_folder() {
-        return 'thumbnails';
+        /**
+         * Filters the thumbnail URL.
+         * 
+         * @since 1.3.0
+         * @param string $image_url The thumbnail URL.
+         * @param int $id           Attachment ID.
+         * @param string $size      Size of image.     
+         */
+        return apply_filters('fr_thumbnails_folder_image_sizes_get_image_size_url', $image_url, $id, $size);
     }
     
     /**
      * Get the image sizes path.
      * 
+     * The $id and $size parameters are not used here, but may be used by other plugins 
+     * to customize the image sizes path.
+     * 
      * @since 1.2.0
+     * @param int $id       Attachment ID.
+     * @param string $size  Size of image.     
      * @return string
      */
-    public function get_image_sizes_path() {
-        $folder     = $this->get_image_sizes_folder();
-        $upload_dir = wp_get_upload_dir();
+    public function get_image_sizes_path($id, $size) {        
+        $folder             = $this->get_image_sizes_folder($id, $size);
+        $upload_dir         = wp_get_upload_dir();
+        $image_sizes_path   = path_join($upload_dir['basedir'], $folder);
         
-        return path_join($upload_dir['basedir'], $folder);
+        /**
+         * Filters the image sizes path.
+         * 
+         * @since 1.3.0
+         * @param string $image_sizes_path  The image sizes path.
+         * @param int $id                   Attachment ID.
+         * @param string $size              Size of image.     
+         */
+        return apply_filters('fr_thumbnails_folder_image_sizes_get_image_sizes_path', $image_sizes_path, $id, $size);
+    }
+    
+    /**
+     * Get the image sizes folder.
+     * 
+     * The attachment ID is not used here, but may be used by other plugins to customize 
+     * the image sizes folder.
+     * 
+     * @since 1.0.0
+     * @param int $id       Attachment ID.
+     * @param string $size  Size of image.     
+     * @return string
+     */
+    protected function get_image_sizes_folder($id, $size) {
+        /**
+         * Filter the image sizes folder.
+         * 
+         * @since 1.3.0
+         * @param string $image_sizes_folder    The image sizes folder.
+         * @param int $id                       Attachment ID.
+         * @param string $size                  Size of image.    
+         */
+        return apply_filters('fr_thumbnails_folder_image_sizes_get_image_sizes_folder', 'thumbnails', $id, $size);
     }
     
     /**
