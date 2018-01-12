@@ -57,7 +57,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
             // thumbnail exists,
             isset($metadata['sizes'][$size]) && 
             // but still in the default location.
-            (!isset($metadata['sizes'][$size]['path']) || !stristr($metadata['sizes'][$size]['path'], $this->get_image_sizes_path()))
+            (!isset($metadata['sizes'][$size]['path']) || stripos($metadata['sizes'][$size]['path'], $this->get_image_sizes_path()) === false)
         ) {
             return $downsize;
         }
@@ -134,7 +134,7 @@ class Fr_Thumbnails_Folder_Image_Sizes {
             $basename = basename($source['url']);
             
             foreach ($image_meta['sizes'] as $size => $size_data) {
-                if (!isset($size_data['path']) || !stristr($size_data['path'], $this->get_image_sizes_path())) {
+                if (!isset($size_data['path']) || stripos($size_data['path'], $this->get_image_sizes_path()) === false) {
                     continue;
                 }
         
