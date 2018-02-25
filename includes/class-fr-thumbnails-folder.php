@@ -81,6 +81,7 @@ class Fr_Thumbnails_Folder {
         $this->set_locale();
         $this->define_image_sizes_hooks();
         $this->define_admin_hooks();
+        $this->define_console_commands();
     }
 
     /**
@@ -111,6 +112,13 @@ class Fr_Thumbnails_Folder {
          * The class responsible for defining all actions that occur in the admin area.
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fr-thumbnails-folder-admin.php';
+        
+        /**
+         * WP-CLI commands.
+         */
+        if ( defined( 'WP_CLI' ) && WP_CLI ) {
+            require_once plugin_dir_path( dirname( __FILE__ ) ) . 'console/class-fr-thumbnails-folder-console-command-delete-thumbnails.php';
+        }
 
         $this->loader       = new Fr_Thumbnails_Folder_Loader();
         $this->image_sizes  = new Fr_Thumbnails_Folder_Image_Sizes();
@@ -160,6 +168,20 @@ class Fr_Thumbnails_Folder {
         $this->loader->add_action('wp_ajax_fr_thumbnails_folder_delete_image_sizes', $plugin_admin, 'delete_image_sizes');
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+    }
+    
+    /**
+     * Register all of the WP-CLI commands.
+     *
+     * @since    1.3.0
+     * @access   private
+     */
+    private function define_console_commands() {
+        if (!defined('WP_CLI') || !WP_CLI) {
+            return;
+        }
+        
+        WP_CLI::add_command('fr-thumbnails-folder delete-thumbnails', 'Fr_Thumbnails_Folder_Console_Command_Delete_Thumbnails');
     }
 
     /**

@@ -14,7 +14,7 @@ Move thumbnails file location to `{$upload_path}/thumbnails` or `{$upload_path}/
 
 WordPress generates thumbnails in the same directory with the original image. This plugin change this behavior by generating the thumbnails in a separate directory. The thumbnails will only be generated when they are needed and has not been generated.
 
-This plugin will only move the thumbnails location for new uploaded images. To move all thumbnails, you need to delete all existing thumbnails from *Tools &rarr; Delete Thumbnails*.
+This plugin will only move the thumbnails location for new uploaded images. To move all thumbnails, you need to delete all existing thumbnails (see FAQ).
 
 == Installation ==
 
@@ -28,6 +28,26 @@ This plugin will only move the thumbnails location for new uploaded images. To m
 1. Deactivate and delete the plugin through the *Plugins* menu in WordPress
 1. Regenerate thumbnails using [Regenerate Thumbnails](https://wordpress.org/plugins/regenerate-thumbnails/) plugin
 1. Delete `{$upload_path}/thumbnails` directory
+
+= How to delete all existing thumbnails? =
+
+- WP-CLI
+
+    This is the recommended way, especially if you have a lot of images.
+
+    ```
+    wp fr-thumbnails-folder delete-thumbnails
+    ```
+
+    For multisite:
+
+    ```
+    wp --url=<site address url> fr-thumbnails-folder delete-thumbnails
+    ```
+
+- GUI
+
+    Tools &rarr; Delete Thumbnails
 
 = Why did you create this plugin? =
 

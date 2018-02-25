@@ -55,7 +55,7 @@ class Fr_Thumbnails_Folder_Admin {
      * Hook on `wp_ajax_{$action}` action. The dynamic portion of the hook name, 
      * `$action`, the name of the AJAX action callback being fired, which is `fr_thumbnails_folder_delete_image_sizes`.
      *
-     * @since 2.6.0
+     * @since 1.0.0
      */
     public function delete_image_sizes() {
         check_ajax_referer('fr_thumbnails_folder', 'nonce');
