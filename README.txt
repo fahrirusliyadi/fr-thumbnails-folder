@@ -3,8 +3,8 @@ Contributors: fahrirusliyadi
 Donate link: https://paypal.me/FahriRusliyadi
 Tags: thumbnail, thumbnails, image, images, folder, directory
 Requires at least: 4.4.0
-Tested up to: 4.9.1
-Stable tag: 1.2.0
+Tested up to: 4.9.4
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,15 +35,11 @@ This plugin will only move the thumbnails location for new uploaded images. To m
 
     This is the recommended way, especially if you have a lot of images.
 
-    ```
-    wp fr-thumbnails-folder delete-thumbnails
-    ```
+        wp fr-thumbnails-folder delete-thumbnails
 
     For multisite:
 
-    ```
-    wp --url=<site address url> fr-thumbnails-folder delete-thumbnails
-    ```
+        wp --url=<site address url> fr-thumbnails-folder delete-thumbnails
 
 - GUI
 
@@ -54,6 +50,10 @@ This plugin will only move the thumbnails location for new uploaded images. To m
 When backing up files, I only want the original images, not the thumbnails. So to make things easier, I need to separate its location.
 
 == Changelog ==
+
+= 1.3.0 =
+* Add filter hooks to allow modification of the thumbnail location.
+* Add `wp fr-thumbnails-folder delete-thumbnails` command.
 
 = 1.2.0 =
 * Add ability to retry deleting thumbnails.
