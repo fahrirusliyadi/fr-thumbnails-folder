@@ -49,6 +49,10 @@ This plugin will only move the thumbnails location for new uploaded images. To m
 
 When backing up files, I only want the original images, not the thumbnails. So to make things easier, I need to separate its location.
 
+== Screenshots ==
+
+1. Folder tree view
+
 == Changelog ==
 
 = 1.3.0 =
