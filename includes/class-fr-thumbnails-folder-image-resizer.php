@@ -167,7 +167,11 @@ class Fr_Thumbnails_Folder_Image_Resizer {
          */ 
         $this->metadata['sizes'][$this->args['size']] = $save_result;
 
-        $metadata_result = wp_update_attachment_metadata($this->args['id'], $this->metadata);
+        /**
+         * Add slashes to the value because update_metadata() expects slashed data.
+         * {@link https://github.com/WordPress/WordPress/blob/24567bf775f21831bf4cd4c6af5aa08594c116f6/wp-includes/meta.php#L182} 
+         */
+        $metadata_result = wp_update_attachment_metadata($this->args['id'], wp_slash($this->metadata));
 
         if (!$metadata_result) {
             return;
