@@ -49,7 +49,7 @@ class Fr_Thumbnails_Folder_Image_Resizer {
     public function __construct($args) {
         $this->args = $args;
     }
-    
+
     /**
      * Resize the image.
      * 
@@ -58,18 +58,13 @@ class Fr_Thumbnails_Folder_Image_Resizer {
      *                      the image is an intermediate size. Null if does not exist.
      */
     public function resize() {
-        $this->set_metadata();        
-
-        if (empty($this->metadata['file'])) {
-            return;
-        }
-        
+        $this->set_metadata();
         $this->set_wanted_size();
-        
+
         if (!$this->wanted_size) {
             return;
-        }      
-        
+        }
+
         return $this->generate_image_size();
     }
     
@@ -90,6 +85,7 @@ class Fr_Thumbnails_Folder_Image_Resizer {
      */
     protected function set_metadata() {
         $this->metadata = wp_get_attachment_metadata($this->args['id']);
+        $this->metadata = $this->metadata ? $this->metadata : array();
     }
     
     /**
@@ -135,8 +131,19 @@ class Fr_Thumbnails_Folder_Image_Resizer {
      *                      the image is an intermediate size. Null if does not exist.
      */
     protected function generate_image_size() {
-        $image_path     = get_attached_file($this->args['id']);
-        $image_editor   = wp_get_image_editor($image_path);
+        $image_path = get_attached_file($this->args['id']);
+
+        // If it isn't an image, we'll use the converted image as source image.
+        if (!wp_attachment_is_image($this->args['id'])) {
+            if (isset($this->metadata['sizes']['full']['file'])) {
+                $basename = wp_basename($image_path);
+                $image_path = str_replace($basename, $this->metadata['sizes']['full']['file'], $image_path);
+            } else {
+                return;
+            }
+        }
+
+        $image_editor = wp_get_image_editor($image_path);
 
         if (is_wp_error($image_editor)) {
             return;
