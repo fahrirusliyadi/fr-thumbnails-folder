@@ -112,9 +112,15 @@ class Fr_Thumbnails_Folder_Image_Resizer {
             return;
         }
 
-        if (!$width && !$height) {
+        if (
+            (!$width && !$height)
+            || (
+                !empty($this->metadata)
+                && ($width >= $this->metadata['width'] || $height >= $this->metadata['height'])
+            )
+        ) {
             return;
-        }   
+        }
         
         $this->wanted_size = array(
             'width'     => $width,
