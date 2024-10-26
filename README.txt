@@ -3,8 +3,8 @@ Contributors: fahrirusliyadi
 Donate link: https://paypal.me/FahriRusliyadi
 Tags: thumbnail, thumbnails, image, images, folder, directory
 Requires at least: 4.4.0
-Tested up to: 5.3.2
-Stable tag: 1.3.1
+Tested up to: 6.6.2
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,10 @@ When backing up files, I only want the original images, not the thumbnails. So t
 1. Folder tree view
 
 == Changelog ==
+
+= 1.4.0 =
+* Add support for PDF.
+* Fix only resize if smaller than the original size.
 
 = 1.3.1 =
 * Fix broken image path on Windows.

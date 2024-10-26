@@ -16,7 +16,7 @@
  * Plugin Name:       Fr Thumbnails Folder
  * Plugin URI:        https://wordpress.org/plugins/fr-thumbnails-folder/
  * Description:       Move thumbnails file location to <code>{$upload_path}/thumbnails</code> or <code>{$upload_path}/sites/{$blog_id}/thumbnails</code> for multisite.
- * Version:           1.3.1
+ * Version:           1.4.0
  * Author:            Fahri Rusliyadi
  * Author URI:        https://profiles.wordpress.org/fahrirusliyadi
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'FR_THUMBNAILS_FOLDER_VERSION', '1.3.1' );
+define( 'FR_THUMBNAILS_FOLDER_VERSION', '1.4.0' );
 
 /**
  * The core plugin class that is used to define internationalization,
